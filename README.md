@@ -1,6 +1,6 @@
 # tools
-Useful scripts and utilities for work (support/admin/devops).
-These scripts were created for various tasks to automate routine at the very beginning of my career and have not been updated since.
+Useful scripts and utilities for work (support/admin/devops).<br></br>
+These scripts were created for various tasks to automate routine at the very beginning of my career and have not been updated since.<br></br>
 Please be understanding :)
 # Sripts list
 - [airflow-dags-push-gitlab](airflow-dags-push-gitlab/README.md)

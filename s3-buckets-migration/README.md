@@ -1,5 +1,5 @@
 # S3 Buckets migration
-This set of scripts was used to transfer banquet objects from one s3 to another.
+This set of scripts was used to transfer bucket objects from one s3 to another.
 
 ## Requirements
 - [boto3 1.26.16](https://pypi.org/project/boto3/)
