@@ -1,3 +1,5 @@
+# Settings file
+
 # ELASTICSEACRH CREDENTIALS
 es_user = "user"
 es_password = "***"

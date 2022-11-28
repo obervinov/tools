@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 from opentelemetry import trace
 from opentelemetry.exporter.jaeger.thrift import JaegerExporter
 from opentelemetry.sdk.resources import SERVICE_NAME, Resource

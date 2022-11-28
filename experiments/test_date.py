@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 from __future__ import division
 from datetime import datetime, timedelta
 import pendulum
