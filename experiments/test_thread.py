@@ -8,10 +8,10 @@ def test(index_thread):
     print("current thread: " + str(threading.current_thread().getName()))
     time.sleep(3)
 
+
 def return_results(a, b):
     a = a + 1
     b = b + 2
-    results = a
     return a
 
 
@@ -27,7 +27,7 @@ while index_thread < 100:
         thread_job = threading.Thread(target=return_results, args=(a, b, ))
         thread_poll.append(thread_job)
         thread_job.start()
-        index_thread = index_thread +1
+        index_thread = index_thread + 1
     else:
         for index, thread in enumerate(thread_poll):
             ret = thread.join()

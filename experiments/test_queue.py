@@ -1,12 +1,13 @@
-from asyncore import read
 import threading
 import time
 import queue
+
 
 def read_q(q):
     for job in iter(q.get, None):
         print(job)
         time.sleep(30)
+
 
 q = queue.Queue()
 q.put("1")

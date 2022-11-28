@@ -17,6 +17,7 @@ LIMIT = 2000
 RPS = 5000
 SLEEP = 1
 
+
 def get_random_string(length):
     letters = string.ascii_lowercase
     result_str = ''.join(random.choice(letters) for i in range(length))
@@ -56,10 +57,10 @@ elif ACTION == "write":
     print()
     print(client)
     print(collection)
-    print()    
+    print()
     print("===> START TEST WRITE REQUEST DOCS:")
     while True:
-        for i in range(0, RPS):    
+        for i in range(0, RPS):
             post = {"author": "obervinov",
                     "text": "This is pymongo testing write docs",
                     "tags": ["mongodb", "python", "pymongo"],

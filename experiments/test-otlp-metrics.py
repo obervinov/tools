@@ -6,7 +6,7 @@ from opentelemetry.sdk.trace.export import BatchSpanProcessor
 
 
 trace.set_tracer_provider(
-TracerProvider(
+    TracerProvider(
         resource=Resource.create({SERVICE_NAME: "python-test-connection"})
     )
 )

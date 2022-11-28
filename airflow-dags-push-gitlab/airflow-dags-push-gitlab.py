@@ -4,11 +4,20 @@ import logging
 from datetime import datetime
 from git import Repo
 
-##### Envermoment variables values #####
-logging.basicConfig(level=logging.DEBUG, format='%(asctime)s [%(levelname)s] (%(name)s) %(process)d-%(threadName)s ---> %(message)s')
+# Envermoment variables values #
+logging.basicConfig(
+            level=logging.DEBUG,
+            format='%(asctime)s [%(levelname)s] (%(name)s) %(process)d-%(threadName)s ---> %(message)s'
+        )
 logging.info("Set envermoment variables values")
 
-CP_DIRS_LIST = ['/opt/airflow/dags', '/opt/airflow/dag_configs', '/opt/airflow/ibe_model_bcp', '/opt/airflow/python_home', '/opt/airflow/qa']
+CP_DIRS_LIST = [
+    '/opt/airflow/dags',
+    '/opt/airflow/dag_configs',
+    '/opt/airflow/ibe_model_bcp',
+    '/opt/airflow/python_home',
+    '/opt/airflow/qa'
+]
 
 DIR_REPLACE = "/opt/airflow"
 GIT_DST_DIR = "/opt/gyt_sync_script/dag_airflow"
@@ -17,11 +26,18 @@ GIT_REPO = r'/opt/gyt_sync_script/dag_airflow/.git'
 GIT_ACCESS_TOKEN = "***"
 GIT_COMMIT_MESSAGE = "empty"
 
-logging.info("\nCP_DIRS_LIST: " + str(CP_DIRS_LIST) + "\nDIR_REPLACE: " + DIR_REPLACE + "\GIT_DST_DIR: " + GIT_DST_DIR + "\nGIT_BRANCH: " + GIT_BRANCH + "\nGIT_REPO: " + GIT_REPO + "\nCOMMIT_MESSAGE: " + GIT_COMMIT_MESSAGE)
-##### Envermoment variables values #####
+logging.info(
+            f"\nCP_DIRS_LIST: {CP_DIRS_LIST}"
+            f"\nDIR_REPLACE: {DIR_REPLACE}"
+            f"\nGIT_DST_DIR: {GIT_DST_DIR}"
+            f"\nGIT_BRANCH: {GIT_BRANCH}"
+            f"\nGIT_REPO: {GIT_REPO}"
+            f"\nCOMMIT_MESSAGE: {GIT_COMMIT_MESSAGE}"
+        )
+# Envermoment variables values #
 
 
-##### Def from list and copy files to gitlab repository #####
+# Def from list and copy files to gitlab repository #
 def cp_src_to_dst(SRC_DIR):
     logging.info("cp_src_to_dst(SRC_DIR): start def with args: " + SRC_DIR)
     for src_dir, dirs, files in os.walk(SRC_DIR):
@@ -37,21 +53,19 @@ def cp_src_to_dst(SRC_DIR):
                 os.remove(dst_file)
             shutil.copy2(src_file, dst_dir)
     logging.info("cp_src_to_dst(SRC_DIR): finish def with args: " + SRC_DIR)
-##### Def from list and copy files to gitlab repository #####
+# Def from list and copy files to gitlab repository #
 
 
-
-##### Def generate commit message body from gitlab repository push operations #####
+# Def generate commit message body from gitlab repository push operations #
 def gen_commit_message():
     now = datetime.now()
     TIMESTAMP = now.strftime("%d/%m/%Y %H:%M:%S")
     BODY_COMMIT_MESSAGE = str(TIMESTAMP) + ": host: host-1, dags updated with a py script in the cron"
     return BODY_COMMIT_MESSAGE
-##### Def generate commit message body from gitlab repository push operations #####
+# Def generate commit message body from gitlab repository push operations #
 
 
-
-##### Def from git push content #####
+# Def from git push content #
 def git_push():
     logging.info("git_push(): start def")
     try:
@@ -69,14 +83,14 @@ def git_push():
         repo.git.push('origin', GIT_BRANCH)
     except Exception as e:
         logging.info("git_push(): error exception: " + str(e))
-##### Def from git push content #####
+# Def from git push content #
 
 
 def main():
     logging.info("main(): start recursive list files in " + str(CP_DIRS_LIST))
     for DIR in CP_DIRS_LIST:
         cp_src_to_dst(DIR)
-    git_push()    
+    git_push()
 
 
 if __name__ == "__main__":

@@ -23,6 +23,7 @@ results = []
 
 token = None
 
+
 def publish_message_kafka(producer_instance, topic_name, key, value):
     try:
         key_bytes = bytes(key, encoding='utf-8')
@@ -34,21 +35,25 @@ def publish_message_kafka(producer_instance, topic_name, key, value):
         print('Exception in publishing message')
         print(str(ex))
 
+
 def connect_kafka_producer():
     _producer = None
     try:
-        _producer = KafkaProducer(bootstrap_servers=['kafka-1.example.com:9093'],
-        api_version=(0, 10), 
-        security_protocol='SSL', 
-        ssl_check_hostname=True,
-        ssl_cafile='kafka_client.truststore.pem', 
-        ssl_certfile='kafka_client.keystore.pem',
-        ssl_keyfile='kafka_client.keystore.key')
+        _producer = KafkaProducer(
+                        bootstrap_servers=['kafka-1.example.com:9093'],
+                        api_version=(0, 10),
+                        security_protocol='SSL',
+                        ssl_check_hostname=True,
+                        ssl_cafile='kafka_client.truststore.pem',
+                        ssl_certfile='kafka_client.keystore.pem',
+                        ssl_keyfile='kafka_client.keystore.key'
+                    )
     except Exception as ex:
         print('Exception while connecting Kafka')
         print(str(ex))
     finally:
         return _producer
+
 
 def send_kafka(key_value):
     kafka_producer = connect_kafka_producer()
@@ -59,12 +64,22 @@ def send_kafka(key_value):
         kafka_producer.close()
         return "send_kafka successfully"
 
+
 while True:
     if token:
         kwargs = {'NextPageToken': token}
     else:
         kwargs = {}
-    data = cd.get_cost_and_usage(TimePeriod={'Start': start, 'End':  end}, Granularity='DAILY', Metrics=['UnblendedCost'], GroupBy=[{'Type': 'DIMENSION', 'Key': 'LINKED_ACCOUNT'}, {'Type': 'DIMENSION', 'Key': 'SERVICE'}], **kwargs)
+    data = cd.get_cost_and_usage(
+                TimePeriod={'Start': start, 'End':  end},
+                Granularity='DAILY',
+                Metrics=['UnblendedCost'],
+                GroupBy=[
+                    {'Type': 'DIMENSION', 'Key': 'LINKED_ACCOUNT'},
+                    {'Type': 'DIMENSION', 'Key': 'SERVICE'}
+                ],
+                **kwargs
+            )
     results += data['ResultsByTime']
     token = data.get('NextPageToken')
     if not token:
@@ -84,7 +99,7 @@ for result_by_time in results:
             'tags': 'aws-coast'
         }
         json_out = json.dumps(json_data)
-        try: 
+        try:
             send_kafka(json_out)
         except Exception as err:
             print(str(err))

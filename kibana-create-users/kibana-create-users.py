@@ -1,8 +1,7 @@
 #!/usr/bin/env python
 
-### Import vars from variables.py
+# Import vars from variables.py
 import variables
-#################################
 import requests
 import re
 import string
@@ -12,12 +11,11 @@ from slack_sdk.errors import SlackApiError
 from jsonpath_ng import parse
 
 
-###### Load vars            
+# Load vars #
 roles = variables.roles_ps
 es_username = variables.es_user
 es_password = variables.es_password
 es_url = variables.es_url
-################
 
 SLACK_BOT_TOKEN = "****"
 SLACK_TEXT_HEAD = (
@@ -25,7 +23,7 @@ SLACK_TEXT_HEAD = (
         "This is a personal account for accessing kibana\n"
         "If any access rights are missing, please contact me <@o.bervinov>\n\n"
         "Your Login/Password:"
-    )
+)
 
 
 def slack_send_message(email, creds):
@@ -47,13 +45,11 @@ def slack_send_message(email, creds):
     except SlackApiError as e:
         assert e.response["ok"] is False
         assert e.response["error"]
-        print(f"Got an error: {e.response['error']}")    
-
+        print(f"Got an error: {e.response['error']}")
 
 
 def passwd_gen(size=12, chars=string.ascii_uppercase + string.digits + string.ascii_lowercase):
-   return ''.join(random.choice(chars) for _ in range(size))
-
+    return ''.join(random.choice(chars) for _ in range(size))
 
 
 def user_data_gen(email):
@@ -78,20 +74,26 @@ def user_data_gen(email):
         password = passwd_gen()
         link = es_url + username
 
-        response = requests.post(link,
-            auth = (es_username, es_password),
-            headers = {'Content-Type': 'application/json'},
-            json = {
-                "password" : password,
-                "full_name" : full_name_1 + " " + full_name_2,
-                "email" : email,
-                "roles": roles,
-                "metadata": {}
-                }
-        )
+        response = requests.post(
+                                link,
+                                auth=(
+                                        es_username,
+                                        es_password
+                                      ),
+                                headers={
+                                            'Content-Type': 'application/json'
+                                        },
+                                json={
+                                        "password": password,
+                                        "full_name": f"{full_name_1} {full_name_2}",
+                                        "email": email,
+                                        "roles": roles,
+                                        "metadata": {}
+                                    }
+                            )
 
         print("create user " + str(response))
-        CREDENTINALS = "\n`" + username + "`\n`" + password + "`" 
+        CREDENTINALS = f"\n `{username}`\n`{password}`"
         return CREDENTINALS
 
     else:
@@ -103,21 +105,27 @@ def user_data_gen(email):
         link = es_url + username
         enabled = 'true'
 
-        response = requests.post(link,
-            auth = (es_username, es_password),
-            headers = {'Content-Type': 'application/json'},
-            json = {
-                "password" : password,
-                "full_name" : username_full,
-                "email" : email,
-                "roles": roles,
-                "metadata": {},
-                "enabled": enabled
-                }
-        )
+        response = requests.post(
+                                link,
+                                auth=(
+                                        es_username,
+                                        es_password
+                                     ),
+                                headers={
+                                            'Content-Type': 'application/json'
+                                        },
+                                json={
+                                        "password": password,
+                                        "full_name": username_full,
+                                        "email": email,
+                                        "roles": roles,
+                                        "metadata": {},
+                                        "enabled": enabled
+                                    }
+                            )
 
         print("create user " + str(response))
-        CREDENTINALS = "\n`" + username + "`\n`" + password + "`" 
+        CREDENTINALS = f"\n `{username}`\n`{password}`"
         return CREDENTINALS
 
 
@@ -126,6 +134,6 @@ lines = file.readlines()
 for line in lines:
     line = re.sub("^\s+|\n|\r|\s+$", '', line)
     creds = user_data_gen(line)
-    slack_send_message(line,creds)
+    slack_send_message(line, creds)
 file.close
 print('done')

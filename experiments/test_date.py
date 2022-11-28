@@ -1,5 +1,5 @@
 from __future__ import division
-from datetime import date, datetime, timedelta
+from datetime import datetime, timedelta
 import pendulum
 
 utc = pendulum.timezone('UTC')
