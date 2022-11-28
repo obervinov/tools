@@ -9,7 +9,7 @@ import urllib.parse
 from pymongo import MongoClient
 
 ACTION = sys.argv[1]
-HOST = "mongodb-host-1"
+HOST = "mongodb-1"
 PORT = "27017"
 USER = urllib.parse.quote_plus('python')
 PASS = password = urllib.parse.quote_plus('python')
